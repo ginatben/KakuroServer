@@ -46,7 +46,9 @@ public class SolveFromImageHandler implements Route {
     JsonNode board = getBoardFromImage(image);
     KakuroSolver solver = new KakuroSolver((ArrayNode) board);
     response.type("application/json");
-    return mapper.writeValueAsString(solver.getResultJson());
+    return mapper.writeValueAsString(solver.getResultJson()).
+      replace("null", "{\"state\":\"white\", \"value\":\"\"}").
+      replace("X", "{\"state\":\"black\"}");
   }
 
   private JsonNode getBoardFromImage(FileItem image) throws JsonProcessingException, IOException
@@ -61,7 +63,9 @@ public class SolveFromImageHandler implements Route {
       "[\"X\",{\"right\":6}, null, null, null, {\"down\":4, \"right\":10}, null, null, \"X\"]," +
       "[\"X\", {\"down\":4, \"right\":19}, null, null, null, null, null, {\"down\":3}, {\"down\":4}]," +
       "[{\"right\":6}, null, null, \"X\", {\"right\":10}, null, null, null, null]," +
-      "[{\"right\":7}, null, null, \"X\", \"X\", \"X\", {\"right\":4}, null, null]]";
+      "[{\"right\":7}, null, null, \"X\", \"X\", \"X\", {\"right\":4}, null, null]]".
+      replace("null", "{\"state\":\"white\", \"value\":\"\"}").
+      replace("X", "{\"state\":\"black\"}");
 
     return mapper.readTree(dummyBoardJson);
   }
