@@ -16,6 +16,8 @@ public class SolveFromJsonHandler implements Route {
     JsonNode boardJson = mapper.readTree(request.body());
     KakuroSolver solver = new KakuroSolver((ArrayNode) boardJson);
     response.type("application/json");
-    return mapper.writeValueAsString(solver.getResultJson());
+    return mapper.writeValueAsString(solver.getResultJson()).
+      replace("null", "{\"state\":\"white\", \"value\":\"\"}").
+      replace("X", "{\"state\":\"black\"}");
   }
 }
