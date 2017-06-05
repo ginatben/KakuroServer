@@ -59,6 +59,7 @@ public final class KakuroSolver {
                 ArrayNode row = (ArrayNode) board.get(i);
                 for (int j = 0; j < row.size(); ++j) {
                     JsonNode cell = row.get(j);
+                   
                     int sumRight = beginSum(cell, "right");
                     if (sumRight > 0) {
                         for (int jj = j + 1; jj < row.size(); ++jj) {
@@ -66,12 +67,19 @@ public final class KakuroSolver {
                         }
                         finishSum(sumRight);
                     }
+
                     int sumDown = beginSum(cell, "down");
                     if (sumDown > 0) {
                         for (int ii = i + 1; ii < numOfRows(); ++ii) {
                             if (!addCellToModel(ii, j)) break;
                         }
                         finishSum(sumDown);
+                    }
+                    
+                    if (sumRight > 0 || sumDown > 0) {
+                        String state1 = (sumDown > 0) ? "down" : "";
+                        String state2 = (sumRight > 0) ? "right" : "";
+                        ((ObjectNode)cell).put("state", state1 + state2);
                     }
                 }
             }
